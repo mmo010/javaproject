@@ -1,0 +1,99 @@
+<!doctype html>
+  <head>
+
+  </head>
+  <style>
+    /* CSS Variables declaration */
+    :root {
+      --grid-rows: 1;
+      --grid-col: 1;
+    }
+    #top {
+      text-align: center;
+      margin: 1em;
+    }
+    #container {
+      display: grid;
+      /* grid-gap: 1em; */
+      /* repeat() creates the number of rows and columns based on the css variable defined */
+      /* fr is fractional unit which means how much of the available space is taken up */
+      grid-template-rows: repeat(var(--grid-rows), 1fr); 
+      grid-template-columns: repeat(var(--grid-cols), 1fr);
+      grid-auto-rows: 1fr;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .grid-item {
+      /* Height 0 and padding-top 100% creates square elements */
+      height: 0;
+      padding-top: 100%;
+      display: grid;
+      border: 1px solid black;
+      text-align:center;
+    }
+  </style>
+  <body>
+
+    <div id = "top">
+        <button>Reset</button>
+    </div>
+    <div id="container">
+      
+      
+
+    </div>
+
+  </body>
+  <script>
+    
+    // Select container div which is to be the parent node
+    const container = document.querySelector('#container');
+    // Reload Grid Function with user inputted values
+    const resetButton = document.querySelector('button');
+    // Initialize web page with a 16 x 16 grid
+    makeGrid(16,16);
+    paintBlocks();
+    resetGrid();
+    // Functions
+    // ---------
+     // Make Grid Function
+     function makeGrid(rows, cols) {
+      // element.style.setProperty() method sets a new value for a CSS property
+      // --variable-name is custom property notation for CSS variables 
+      container.style.setProperty('--grid-rows', rows); // sets number of rows to value of rows
+      container.style.setProperty('--grid-cols', cols); // sets number of columns to value of cols
+      for (c = 0; c < (rows * cols); c++) {
+        let cell = document.createElement('div');
+        // cell.innerText = (c + 1);
+        container.appendChild(cell).className = 'grid-item';
+      }
+    }
+    function paintBlocks() {
+      // Select all grid items
+      let items = document.querySelectorAll('.grid-item');
+      // Change background colour after hover effect
+      items.forEach((item) => {
+        item.addEventListener('mouseover', function(event) {
+          this.style.backgroundColor = "red";
+        });
+      });
+    }
+    function resetGrid() {
+      // When button is clicked
+      resetButton.addEventListener('click', (event) => {
+      // ask the user to enter the grid dimension
+      let cellDim = prompt("how many squares per side?");
+      // if user enters a positive number
+      // clear current grid
+      let child = container.lastElementChild;
+      while (child) {
+        container.removeChild(child);
+        child = container.lastElementChild;
+      }
+      // create new grid with user entered number
+      makeGrid(cellDim,cellDim);
+      paintBlocks();
+      });
+    } 
+  </script>
+</html>
